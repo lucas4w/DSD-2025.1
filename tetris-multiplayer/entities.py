@@ -4,7 +4,7 @@ class Quadrado(pygame.sprite.Sprite):
     def __init__(self,x,y,cor):
         super().__init__()
         self.x = x
-        self.y = y;
+        self.y = y
         self.cor = cor
         self.image = pygame.Surface((20,20))
         self.image.fill(cor)
@@ -12,6 +12,11 @@ class Quadrado(pygame.sprite.Sprite):
     
     def update_position(self):
         self.rect.topleft = (self.x,self.y)
+
+    def move(self,x,y):
+        self.x = x
+        self.y = y
+        self.update_position()
 
 class BlocoI(pygame.sprite.Sprite):
     def __init__(self,pos_x,pos_y,cor):
