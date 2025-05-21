@@ -18,65 +18,75 @@ class Quadrado(pygame.sprite.Sprite):
         self.y = y
         self.update_position()
 
-class BlocoI(pygame.sprite.Sprite):
-    def __init__(self,pos_x,pos_y,cor):
+class Bloco(pygame.sprite.Sprite):
+    def __init__(self, cor):
         super().__init__()
+        self.cor = cor
+        self.quadrados = pygame.sprite.Group()
+        self.forma = 1
+    
+    def collideDown(self,screen,x,y):
+        raise NotImplementedError()
+    
+    def collideLeft(self,screen,x,y):
+        raise NotImplementedError()
+    
+    def collideRight(self,screen,x,y):
+        raise NotImplementedError()
+
+
+    def show(self,screen):
+        self.quadrados.draw(screen)
+
+class BlocoI(Bloco):
+    def __init__(self,pos_x,pos_y,cor):
+        super().__init__(cor)
         self.pos_x = pos_x 
         self.pos_y = pos_y 
-        self.cor = cor
-        self.forma = 1
 
         self.q1 = Quadrado(pos_x,pos_y,cor)
         self.q2 = Quadrado(pos_x,pos_y+22,cor)
         self.q3 = Quadrado(pos_x,pos_y+44,cor)
         self.q4 = Quadrado(pos_x,pos_y+66,cor)
-
-        self.group = pygame.sprite.Group()
-        self.group.add(self.q1, self.q2, self.q3, self.q4)
+        self.quadrados.add(self.q1, self.q2, self.q3, self.q4)
         
         self.rect = pygame.Rect(pos_x, pos_y, 20, 88)
-        
-    def show(self,screen):
-        self.group.draw(screen)
-        
-    def update_x(self,direction):
-        self.pos_x += direction
-        if self.forma == 1:
-                self.q1.x = self.pos_x
-                self.q2.x = self.pos_x
-                self.q3.x = self.pos_x
-                self.q4.x = self.pos_x
-        else:
-            if direction == 22:
-                self.q1.x = self.pos_x
-                self.q2.x = self.pos_x-22
-                self.q3.x = self.pos_x-44
-                self.q4.x = self.pos_x-66
-            else:
-                self.q1.x = self.pos_x
-                self.q2.x = self.pos_x-22
-                self.q3.x = self.pos_x-44
-                self.q4.x = self.pos_x-66       
-        self.update_all()
 
-    def update_y(self,screen):
-        if self.forma == 1:
-            if self.collideDown(screen,self.q4.y,self.q4.x):
-                return True
-            self.pos_y += 22
-            self.q1.y = self.pos_y
-            self.q2.y = self.pos_y+22
-            self.q3.y = self.pos_y+44
-            self.q4.y = self.pos_y+66
-        else:
-            self.pos_y += 22
-            self.q1.y = self.pos_y
-            self.q2.y = self.pos_y
-            self.q3.y = self.pos_y
-            self.q4.y = self.pos_y
-        self.update_all()
+    def collideDown(self, screen, x, y):
+        rgb = screen.get_at((x,y+22))
+        if rgb != (0,0,0,255):
+            return True
         return False
     
+    def collideLeft(self, screen, x, y):
+        rgb = screen.get_at((x-22,y))
+        if rgb != (0,0,0,255):
+            return True
+        return False
+    
+    def collideRight(self, screen, x, y):
+        rgb = screen.get_at((x+22,y))
+        if rgb != (0,0,0,255):
+            return True
+        return False
+
+    def update_x(self,direction,screen):
+        #if direction == 22:
+           # if self.collideRight():
+            #    return
+        #elif direction == -22:
+            #if self.collideLeft():
+               # return
+        for q in self.quadrados:
+            q.move(q.x + direction, q.y)
+
+    def update_y(self,screen):
+        if self.collideDown(screen,self.q4.x,self.q4.y):
+            return True
+        for q in self.quadrados:
+            q.move(q.x, q.y + 22)
+        return False
+
     def rotate(self):
         if self.forma == 1:    
             self.q1.x = self.q1.x+22
@@ -97,11 +107,4 @@ class BlocoI(pygame.sprite.Sprite):
         self.q2.update_position()
         self.q3.update_position()
         self.q4.update_position()
-        
-    def collideDown(self,screen,y,x):
-        rgb = screen.get_at((x,y+22))
-        if (rgb != (0,0,0,255)):
-            return True
-        
-        #screen.set_at((x,y+22),(255,0,0))
-        #print(self.q1.x,self.q1.y)
+    

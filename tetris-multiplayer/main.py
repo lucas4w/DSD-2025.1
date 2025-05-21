@@ -12,46 +12,37 @@ quadrados = pygame.sprite.Group()
 quadrados_pos = {}
 bloco = ent.BlocoI(215,0,'Yellow')
 
-def move_quadrados(screen,y):
-    x,cx = 105
-    for _ in range(0,20):
-        for _ in range(0,10):
-            if screen.get_at((x,y)) != (0,0,0,255):
-                quadrado = quadrados_pos[(x,y)]
-                del quadrados_pos[(x,y)]
-                quadrados_pos[(x,y+22)] = quadrado
-                quadrado.move(x,y+22)
-            x+=22
-        y -= 22
-        x = cx
- 
-def apaga_linha(y,screen):
-    x = 105
-    for _ in range(0,10):
-        quadrado = quadrados_pos[(x,y)]
-        quadrados.remove(quadrado)
-        x += 22
-    move_quadrados(screen,y-22)
+def apaga_linha(y):
+    for x in range(105, 105 + 10*22, 22):
+        quadrado = quadrados_pos.pop((x, y), None)
+        if quadrado:
+            quadrados.remove(quadrado)
 
-def detecta_linhas(screen):
-    x, y = 105,528
-    cx = x
-    count = 0
-    for _ in range(0,20):
-        for _ in range(0,10):
-            if screen.get_at((x,y)) != (0,0,0,255):
-                count += 1
-            else:
-                break
-            x += 22
-        if count == 10:
-            apaga_linha(y,screen)
+def desce_linhas_acima(y_inicial):
+    novas_pos = {}
+    for (x, y), quadrado in sorted(quadrados_pos.items(), key=lambda item: -item[0][1]):
+        if y < y_inicial:
+            quadrado.y += 22
+            quadrado.update_position()
+            novas_pos[(x, y + 22)] = quadrado
+        else:
+            novas_pos[(x, y)] = quadrado
+    quadrados_pos.clear()
+    quadrados_pos.update(novas_pos)
+
+def detecta_linhas():
+    for y in range(528, 49, -22):
         count = 0
-        x = cx
-        y -= 22
+        for x in range(105, 105 + 10*22, 22):
+            if (x, y) in quadrados_pos:
+                count += 1
+        if count == 10:
+            apaga_linha(y)
+            desce_linhas_acima(y)
+            detecta_linhas()
+            break
 
         
-
 fall_time = 0
 fall_delay = 75
 
@@ -66,9 +57,9 @@ while running:
             running = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_d:
-                bloco.update_x(22)
+                bloco.update_x(22,screen)
             elif event.key == pygame.K_a:
-                bloco.update_x(-22)
+                bloco.update_x(-22,screen)
             elif event.key == pygame.K_k:
                 bloco.rotate()
             elif event.key == pygame.K_r:
@@ -85,12 +76,12 @@ while running:
             quadrados_pos[(bloco.q3.x,bloco.q3.y)] = bloco.q3
             quadrados_pos[(bloco.q4.x,bloco.q4.y)] = bloco.q4
             bloco = ent.BlocoI(215,0,'Yellow')
-            detecta_linhas(screen)
+            detecta_linhas()
 
     screen.fill(BACKGROUND_COLOR)
     pygame.draw.rect(screen, 'Black', jogador_area)
     pygame.draw.rect(screen, 'Black', adversario_area)
-    screen.set_at((105, 462),(255,0,0,255))
+    #screen.set_at((105, 462),(255,0,0,255))
     quadrados.draw(screen)
     bloco.show(screen)
     pygame.display.flip()
