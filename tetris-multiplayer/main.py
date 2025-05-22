@@ -24,7 +24,7 @@ quadrados_adversario = []
 status_adversario = None
 
 def gerar_bloco_aleatorio(x=215, y=94):
-    blocos = [ent.BlocoI, ent.BlocoB]
+    blocos = [ent.BlocoI, ent.BlocoB,ent.BlocoZ,ent.BlocoS]
     return random.choice(blocos)(x, y)
 
 def verifica_game_over(bloco):
@@ -70,7 +70,7 @@ def mostrar_tela_game_over(texto):
     pygame.display.flip()
     pygame.time.delay(3000)
 
-SERVER_IP = 'localhost'
+SERVER_IP = '10.25.2.47'
 TCP_PORT = 12345
 UDP_PORT = 12346
 
@@ -79,7 +79,7 @@ udp_sock.bind(('', 0))  # bind em uma porta livre
 udp_addr = udp_sock.getsockname()
 
 # Conexão TCP para registro inicial
-tcp_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+""" tcp_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 tcp_sock.connect((SERVER_IP, TCP_PORT))
 tcp_sock.sendall(pickle.dumps(udp_addr))
 
@@ -94,7 +94,7 @@ while True:
             print("Outro jogador conectado! Iniciando jogo...")
             break
     except:
-        continue
+        continue """
 
 print("Registrado no servidor.")
 
@@ -117,7 +117,7 @@ threading.Thread(target=receive_udp, daemon=True).start()
 
 # Estado do jogo
 fall_time = 0
-fall_delay = 700
+fall_delay = 70
 bloco_atual = gerar_bloco_aleatorio()
 proximo_bloco = gerar_bloco_aleatorio()
 
