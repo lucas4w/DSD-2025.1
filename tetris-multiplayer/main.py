@@ -1,4 +1,4 @@
-import pygame
+import pygame, random
 import entities as ent
 
 pygame.init()
@@ -10,7 +10,15 @@ adversario_area = pygame.Rect(500, 50, 232, 500)
 
 quadrados = pygame.sprite.Group()
 quadrados_pos = {}
-bloco = ent.BlocoI(215,0,'Yellow')
+
+def gerar_bloco_aleatorio(x=215, y=100):
+    blocos = [
+        ent.BlocoI,
+        ent.BlocoB,
+    ]
+    classe_bloco = random.choice(blocos)
+
+    return classe_bloco(x, y)
 
 def apaga_linha(y):
     for x in range(105, 105 + 10*22, 22):
@@ -44,7 +52,10 @@ def detecta_linhas():
 
         
 fall_time = 0
-fall_delay = 75
+fall_delay = 125
+
+bloco_atual = gerar_bloco_aleatorio()
+proximo_bloco = gerar_bloco_aleatorio()
 
 clock = pygame.time.Clock()
 running = True
@@ -57,33 +68,33 @@ while running:
             running = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_d:
-                bloco.update_x(22,screen)
+                bloco_atual.update_x(22,screen)
             elif event.key == pygame.K_a:
-                bloco.update_x(-22,screen)
+                bloco_atual.update_x(-22,screen)
             elif event.key == pygame.K_k:
-                bloco.rotate()
+                bloco_atual.rotate(screen)
             elif event.key == pygame.K_r:
                 quadrado = quadrados_pos[(105,528)]
                 quadrado.move(105,506)
 
     if fall_time >= fall_delay:
-        parou = bloco.update_y(screen)
+        parou = bloco_atual.update_y(screen)
         fall_time = 0
         if parou:
-            quadrados.add(bloco.q1, bloco.q2, bloco.q3, bloco.q4)
-            quadrados_pos[(bloco.q1.x,bloco.q1.y)] = bloco.q1
-            quadrados_pos[(bloco.q2.x,bloco.q2.y)] = bloco.q2
-            quadrados_pos[(bloco.q3.x,bloco.q3.y)] = bloco.q3
-            quadrados_pos[(bloco.q4.x,bloco.q4.y)] = bloco.q4
-            bloco = ent.BlocoI(215,0,'Yellow')
+            quadrados.add(bloco_atual.q1, bloco_atual.q2, bloco_atual.q3, bloco_atual.q4)
+            quadrados_pos[(bloco_atual.q1.x,bloco_atual.q1.y)] = bloco_atual.q1
+            quadrados_pos[(bloco_atual.q2.x,bloco_atual.q2.y)] = bloco_atual.q2
+            quadrados_pos[(bloco_atual.q3.x,bloco_atual.q3.y)] = bloco_atual.q3
+            quadrados_pos[(bloco_atual.q4.x,bloco_atual.q4.y)] = bloco_atual.q4
             detecta_linhas()
+            bloco_atual = proximo_bloco
+            proximo_bloco = gerar_bloco_aleatorio()
 
     screen.fill(BACKGROUND_COLOR)
     pygame.draw.rect(screen, 'Black', jogador_area)
     pygame.draw.rect(screen, 'Black', adversario_area)
-    #screen.set_at((105, 462),(255,0,0,255))
     quadrados.draw(screen)
-    bloco.show(screen)
+    bloco_atual.show(screen)
     pygame.display.flip()
 
 pygame.quit()
