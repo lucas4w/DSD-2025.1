@@ -1,5 +1,6 @@
 import socket
 import threading
+import pickle
 
 TCP_HOST = '0.0.0.0'
 TCP_PORT = 12345
@@ -13,9 +14,16 @@ lock = threading.Lock()
 def handle_tcp_connection(conn, addr, jogador_id):
     print(f"Jogador {jogador_id} conectado via TCP: {addr}")
     with lock:
-        clientes_tcp[jogador_id] = addr
-    conn.sendall(f"{jogador_id}".encode())
-    conn.close()
+        clientes_tcp[jogador_id] = conn
+
+        if len(clientes_tcp) == 2:
+            print("[TCP] Ambos os jogadores conectados! Enviando sinal de início...")
+            for sock in clientes_tcp.values():
+                try:
+                    sock.sendall(pickle.dumps("start"))
+                except:
+                    pass
+
 
 def tcp_server():
     tcp_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
