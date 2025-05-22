@@ -294,3 +294,346 @@ class BlocoS(Bloco):
             self.forma = 1
             self.pos_x = self.q1.x
             self.pos_y = self.q1.y
+
+class BlocoT(Bloco):
+    def __init__(self,pos_x,pos_y):
+        super().__init__('Red')
+        self.pos_x = pos_x 
+        self.pos_y = pos_y 
+        cor = 'Red'
+        self.q1 = Quadrado(pos_x,pos_y,cor)
+        self.q2 = Quadrado(pos_x+22,pos_y,cor)
+        self.q3 = Quadrado(pos_x+44,pos_y,cor)
+        self.q4 = Quadrado(pos_x+22,pos_y+22,cor)
+        self.quadrados.add(self.q1, self.q2, self.q3, self.q4)
+        
+        self.rect = pygame.Rect(pos_x, pos_y, 20, 88)
+
+    def update_x(self,direction,screen):
+        if direction == 22:
+            if self.forma == 1:
+                if self.collide_direction(screen,[self.q4,self.q3],22,0):
+                    return
+            elif self.forma == 2:
+                if self.collide_direction(screen,[self.q2,self.q3,self.q4],22,0):
+                    return
+            elif self.forma == 3:
+                if self.collide_direction(screen,[self.q3,self.q4],22,0):
+                    return
+            else:
+                if self.collide_direction(screen,[self.q1,self.q3,self.q4],22,0):
+                    return
+        elif direction == -22:
+            if self.forma == 1:
+                if self.collide_direction(screen,[self.q1,self.q4],-22,0):
+                    return
+            elif self.forma == 2:
+                if self.collide_direction(screen,[self.q1,self.q3,self.q4],-22,0):
+                    return
+            elif self.forma == 3:
+                if self.collide_direction(screen,[self.q3,self.q1],-22,0):
+                    return
+            else:
+                if self.collide_direction(screen,[self.q1,self.q3,self.q4],-22,0):
+                    return
+        for q in self.quadrados:
+            q.move(q.x + direction, q.y)
+
+    def update_y(self,screen):
+        if self.forma == 1: 
+            if self.collide_direction(screen,[self.q1,self.q3,self.q4],0,22):
+                return True
+        elif self.forma == 2:
+            if self.collide_direction(screen,[self.q1,self.q4],0,22):
+                return True
+        elif self.forma == 3:
+            if self.collide_direction(screen,[self.q1,self.q2,self.q4],0,22):
+                return True
+        else:
+            if self.collide_direction(screen,[self.q1,self.q4],0,22):
+                return True
+        for q in self.quadrados:
+            q.move(q.x, q.y + 22)
+        return False
+
+    def rotate(self,screen):
+        if self.forma == 1:
+            if self.collide_at(screen,[
+                (self.q4.x-22,self.q3.y-22)]):
+                return
+            self.q3.y = self.q3.y-22 
+            self.q3.x = self.q3.x-22
+            self.q3.update_position()
+            self.forma = 2
+            self.pos_x = self.q1.x
+            self.pos_y = self.q1.y
+        elif self.forma == 2:
+            if self.collide_at(screen,[
+                (self.q4.x+22,self.q4.y-22)]):
+                return
+            self.q4.y = self.q4.y-22
+            self.q4.x = self.q4.x+22
+            self.q4.update_position()
+            self.forma = 3
+            self.pos_x = self.q1.x
+            self.pos_y = self.q1.y
+        elif self.forma == 3:
+            if self.collide_at(screen,[
+                (self.q1.x+22,self.q1.y+22)]):
+                return
+            self.q1.y = self.q1.y+22
+            self.q1.x = self.q1.x+22
+            self.q1.update_position()
+            self.forma = 4
+            self.pos_x = self.q1.x
+            self.pos_y = self.q1.y
+        else:
+            if self.collide_at(screen,[
+                (self.q1.x-22,self.q1.y-22)]):
+                return
+            self.q1.y = self.q1.y-22
+            self.q1.x = self.q1.x-22
+            self.q4.x = self.q4.x-22
+            self.q4.y = self.q4.y+22
+            self.q3.x = self.q3.x+22
+            self.q3.y = self.q3.y+22
+            self.update_all()
+            self.forma = 1
+            self.pos_x = self.q1.x
+            self.pos_y = self.q1.y
+
+class BlocoL(Bloco):
+    def __init__(self,pos_x,pos_y):
+        super().__init__('Red')
+        self.pos_x = pos_x 
+        self.pos_y = pos_y 
+        cor = 'Red'
+        self.q1 = Quadrado(pos_x,pos_y,cor)
+        self.q2 = Quadrado(pos_x+22,pos_y,cor)
+        self.q3 = Quadrado(pos_x+44,pos_y,cor)
+        self.q4 = Quadrado(pos_x,pos_y+22,cor)
+        self.quadrados.add(self.q1, self.q2, self.q3, self.q4)
+        
+        self.rect = pygame.Rect(pos_x, pos_y, 20, 88)
+
+    def update_x(self,direction,screen):
+        if direction == 22:
+            if self.forma == 1:
+                if self.collide_direction(screen,[self.q4,self.q3],22,0):
+                    return
+            elif self.forma == 2:
+                if self.collide_direction(screen,[self.q2,self.q3,self.q4],22,0):
+                    return
+            elif self.forma == 3:
+                if self.collide_direction(screen,[self.q3,self.q2],22,0):
+                    return
+            else:
+                if self.collide_direction(screen,[self.q1,self.q3,self.q2],22,0):
+                    return
+        elif direction == -22:
+            if self.forma == 1:
+                if self.collide_direction(screen,[self.q1,self.q4],-22,0):
+                    return
+            elif self.forma == 2:
+                if self.collide_direction(screen,[self.q1,self.q3,self.q4],-22,0):
+                    return
+            elif self.forma == 3:
+                if self.collide_direction(screen,[self.q2,self.q1],-22,0):
+                    return
+            else:
+                if self.collide_direction(screen,[self.q3,self.q2,self.q4],-22,0):
+                    return
+        for q in self.quadrados:
+            q.move(q.x + direction, q.y)
+
+    def update_y(self,screen):
+        if self.forma == 1: 
+            if self.collide_direction(screen,[self.q2,self.q3,self.q4],0,22):
+                return True
+        elif self.forma == 2:
+            if self.collide_direction(screen,[self.q1,self.q4],0,22):
+                return True
+        elif self.forma == 3:
+            if self.collide_direction(screen,[self.q1,self.q3,self.q4],0,22):
+                return True
+        else:
+            if self.collide_direction(screen,[self.q1,self.q4],0,22):
+                return True
+        for q in self.quadrados:
+            q.move(q.x, q.y + 22)
+        return False
+
+    def rotate(self,screen):
+        if self.forma == 1:
+            if self.collide_at(screen,[
+                (self.q3.x-22,self.q3.y+22),
+                (self.q4.x+22,self.q3.y+22)]):
+                return
+            self.q3.y = self.q3.y+22 
+            self.q3.x = self.q3.x-22
+            self.q4.x = self.q4.x+22
+            self.q4.y = self.q4.y+22
+            self.update_all()
+            self.forma = 2
+            self.pos_x = self.q1.x
+            self.pos_y = self.q1.y
+        elif self.forma == 2:
+            if self.collide_at(screen,[
+                (self.q1.x-22,self.q1.y+22),
+                (self.q4.x-22,self.q4.y-22)]):
+                return
+            self.q4.y = self.q4.y-22
+            self.q4.x = self.q4.x-22
+            self.q1.x = self.q1.x-22
+            self.q1.y = self.q1.y+22
+            self.update_all()
+            self.forma = 3
+            self.pos_x = self.q1.x
+            self.pos_y = self.q1.y
+        elif self.forma == 3:
+            if self.collide_at(screen,[
+                (self.q1.x+66,self.q1.y+22),
+                (self.q4.x+22,self.q4.y+22)]):
+                return
+            self.q4.y = self.q4.y+22
+            self.q4.x = self.q4.x+22
+            self.q1.x = self.q1.x+66
+            self.q1.y = self.q1.y+22
+            self.update_all()
+            self.forma = 4
+            self.pos_x = self.q1.x
+            self.pos_y = self.q1.y
+        else:
+            if self.collide_at(screen,[
+                (self.q1.x-44,self.q1.y-44),
+                (self.q3.x+22,self.q3.y-22),
+                (self.q4.x-22,self.q4.y-22)]):
+                return
+            self.q1.y = self.q1.y-44
+            self.q1.x = self.q1.x-44
+            self.q4.x = self.q4.x-22
+            self.q4.y = self.q4.y-22
+            self.q3.x = self.q3.x+22
+            self.q3.y = self.q3.y-22
+            self.update_all()
+            self.forma = 1
+            self.pos_x = self.q1.x
+            self.pos_y = self.q1.y
+
+class BlocoW(Bloco):
+    def __init__(self,pos_x,pos_y):
+        super().__init__('Red')
+        self.pos_x = pos_x 
+        self.pos_y = pos_y 
+        cor = 'Red'
+        self.q1 = Quadrado(pos_x,pos_y,cor)
+        self.q2 = Quadrado(pos_x+22,pos_y,cor)
+        self.q3 = Quadrado(pos_x+44,pos_y,cor)
+        self.q4 = Quadrado(pos_x+44,pos_y+22,cor)
+        self.quadrados.add(self.q1, self.q2, self.q3, self.q4)
+        
+        self.rect = pygame.Rect(pos_x, pos_y, 20, 88)
+
+    def update_x(self,direction,screen):
+        if direction == 22:
+            if self.forma == 1:
+                if self.collide_direction(screen,[self.q4,self.q3],22,0):
+                    return
+            elif self.forma == 2:
+                if self.collide_direction(screen,[self.q2,self.q3,self.q4],22,0):
+                    return
+            elif self.forma == 3:
+                if self.collide_direction(screen,[self.q3,self.q2],22,0):
+                    return
+            else:
+                if self.collide_direction(screen,[self.q1,self.q3,self.q2],22,0):
+                    return
+        elif direction == -22:
+            if self.forma == 1:
+                if self.collide_direction(screen,[self.q1,self.q4],-22,0):
+                    return
+            elif self.forma == 2:
+                if self.collide_direction(screen,[self.q1,self.q3,self.q4],-22,0):
+                    return
+            elif self.forma == 3:
+                if self.collide_direction(screen,[self.q2,self.q1],-22,0):
+                    return
+            else:
+                if self.collide_direction(screen,[self.q3,self.q2,self.q4],-22,0):
+                    return
+        for q in self.quadrados:
+            q.move(q.x + direction, q.y)
+
+    def update_y(self,screen):
+        if self.forma == 1: 
+            if self.collide_direction(screen,[self.q2,self.q3,self.q4],0,22):
+                return True
+        elif self.forma == 2:
+            if self.collide_direction(screen,[self.q1,self.q4],0,22):
+                return True
+        elif self.forma == 3:
+            if self.collide_direction(screen,[self.q1,self.q3,self.q4],0,22):
+                return True
+        else:
+            if self.collide_direction(screen,[self.q1,self.q4],0,22):
+                return True
+        for q in self.quadrados:
+            q.move(q.x, q.y + 22)
+        return False
+
+    def rotate(self,screen):
+        if self.forma == 1:
+            if self.collide_at(screen,[
+                (self.q3.x-22,self.q3.y+22),
+                (self.q4.x+22,self.q3.y+22)]):
+                return
+            self.q3.y = self.q3.y+22 
+            self.q3.x = self.q3.x-22
+            self.q4.x = self.q4.x+22
+            self.q4.y = self.q4.y+22
+            self.update_all()
+            self.forma = 2
+            self.pos_x = self.q1.x
+            self.pos_y = self.q1.y
+        elif self.forma == 2:
+            if self.collide_at(screen,[
+                (self.q1.x-22,self.q1.y+22),
+                (self.q4.x-22,self.q4.y-22)]):
+                return
+            self.q4.y = self.q4.y-22
+            self.q4.x = self.q4.x-22
+            self.q1.x = self.q1.x-22
+            self.q1.y = self.q1.y+22
+            self.update_all()
+            self.forma = 3
+            self.pos_x = self.q1.x
+            self.pos_y = self.q1.y
+        elif self.forma == 3:
+            if self.collide_at(screen,[
+                (self.q1.x+66,self.q1.y+22),
+                (self.q4.x+22,self.q4.y+22)]):
+                return
+            self.q4.y = self.q4.y+22
+            self.q4.x = self.q4.x+22
+            self.q1.x = self.q1.x+66
+            self.q1.y = self.q1.y+22
+            self.update_all()
+            self.forma = 4
+            self.pos_x = self.q1.x
+            self.pos_y = self.q1.y
+        else:
+            if self.collide_at(screen,[
+                (self.q1.x-44,self.q1.y-44),
+                (self.q3.x+22,self.q3.y-22),
+                (self.q4.x-22,self.q4.y-22)]):
+                return
+            self.q1.y = self.q1.y-44
+            self.q1.x = self.q1.x-44
+            self.q4.x = self.q4.x-22
+            self.q4.y = self.q4.y-22
+            self.q3.x = self.q3.x+22
+            self.q3.y = self.q3.y-22
+            self.update_all()
+            self.forma = 1
+            self.pos_x = self.q1.x
+            self.pos_y = self.q1.y

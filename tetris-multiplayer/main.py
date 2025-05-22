@@ -24,12 +24,12 @@ quadrados_adversario = []
 status_adversario = None
 
 def gerar_bloco_aleatorio(x=215, y=94):
-    blocos = [ent.BlocoI, ent.BlocoB,ent.BlocoZ,ent.BlocoS]
+    blocos = [ent.BlocoL]
     return random.choice(blocos)(x, y)
 
 def verifica_game_over(bloco):
     for q in [bloco.q1, bloco.q2, bloco.q3, bloco.q4]:
-        if (q.x, q.y) in quadrados_pos:
+        if q.y == 116:
             return True
     return False
 
@@ -117,7 +117,7 @@ threading.Thread(target=receive_udp, daemon=True).start()
 
 # Estado do jogo
 fall_time = 0
-fall_delay = 70
+fall_delay = 300
 bloco_atual = gerar_bloco_aleatorio()
 proximo_bloco = gerar_bloco_aleatorio()
 
@@ -140,6 +140,7 @@ while running:
 
     if fall_time >= fall_delay:
         parou = bloco_atual.update_y(screen)
+        print(bloco_atual.q1.x,bloco_atual.q1.y)
         fall_time = 0
         # Monta dados para envio via UDP
         outgoing_data = {
@@ -157,20 +158,18 @@ while running:
         udp_sock.sendto(pickle.dumps(outgoing_data), (SERVER_IP, UDP_PORT))
 
         if parou:
+            if verifica_game_over(bloco_atual):
+                outgoing_data = {'status': 'perdeu'}
+                udp_sock.sendto(pickle.dumps(outgoing_data), (SERVER_IP, UDP_PORT))
+                mostrar_tela_game_over("Você perdeu!")
+                running = False
+                break
             for q in [bloco_atual.q1, bloco_atual.q2, bloco_atual.q3, bloco_atual.q4]:
                 quadrados.add(q)
                 quadrados_pos[(q.x, q.y)] = q
             detecta_linhas()
             bloco_atual = proximo_bloco
             proximo_bloco = gerar_bloco_aleatorio()
-
-            if verifica_game_over(bloco_atual):
-                if verifica_game_over(bloco_atual):
-                    outgoing_data = {'status': 'perdeu'}
-                    udp_sock.sendto(pickle.dumps(outgoing_data), (SERVER_IP, UDP_PORT))
-                    mostrar_tela_game_over("Você perdeu!")
-                    running = False
-                    break
 
     # === Desenho ===
     screen.fill(BACKGROUND_COLOR)
