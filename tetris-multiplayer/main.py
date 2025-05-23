@@ -22,7 +22,7 @@ quadrados_adversario = []
 status_adversario = None
 
 def gerar_bloco_aleatorio(x=215, y=94):
-    blocos = [ent.BlocoL]
+    blocos = [ent.BlocoL,ent.BlocoB,ent.BlocoI,ent.BlocoZ]
     return random.choice(blocos)(x, y)
 
 def verifica_game_over(bloco):
@@ -68,7 +68,7 @@ def mostrar_tela_game_over(texto):
     pygame.display.flip()
     pygame.time.delay(3000)
 
-SERVER_IP = '10.25.2.47'
+SERVER_IP = 'localhost'
 TCP_PORT = 12345
 UDP_PORT = 12346
 
@@ -138,7 +138,6 @@ while running:
 
     if fall_time >= fall_delay:
         parou = bloco_atual.update_y(screen)
-        print(bloco_atual.q1.x,bloco_atual.q1.y)
         fall_time = 0
         # monta dados para envio via UDP
         outgoing_data = {

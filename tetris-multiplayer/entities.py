@@ -334,7 +334,7 @@ class BlocoT(Bloco):
                 if self.collide_direction(screen,[self.q3,self.q1],-22,0):
                     return
             else:
-                if self.collide_direction(screen,[self.q1,self.q3,self.q4],-22,0):
+                if self.collide_direction(screen,[self.q1,self.q3,self.q2],-22,0):
                     return
         for q in self.quadrados:
             q.move(q.x + direction, q.y)
