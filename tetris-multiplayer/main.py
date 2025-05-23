@@ -79,7 +79,7 @@ udp_sock.bind(('', 0))  # bind em uma porta livre
 udp_addr = udp_sock.getsockname()
 
 # conexão TCP para registro inicial
-""" tcp_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+tcp_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 tcp_sock.connect((SERVER_IP, TCP_PORT))
 tcp_sock.sendall(pickle.dumps(udp_addr))
 
@@ -94,7 +94,7 @@ while True:
             print("Outro jogador conectado! Iniciando jogo...")
             break
     except:
-        continue """
+        continue
 
 print("Registrado no servidor.")
 
