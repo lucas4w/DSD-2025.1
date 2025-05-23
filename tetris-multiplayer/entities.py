@@ -48,10 +48,10 @@ class Bloco(pygame.sprite.Sprite):
 
 class BlocoI(Bloco):
     def __init__(self,pos_x,pos_y):
-        super().__init__('Yellow')
+        super().__init__((255, 0, 0))
         self.pos_x = pos_x 
         self.pos_y = pos_y 
-        cor = 'Yellow'
+        cor = (255, 0, 0)
         self.q1 = Quadrado(pos_x,pos_y,cor)
         self.q2 = Quadrado(pos_x,pos_y+22,cor)
         self.q3 = Quadrado(pos_x,pos_y+44,cor)
@@ -126,10 +126,10 @@ class BlocoI(Bloco):
 
 class BlocoB(Bloco):
     def __init__(self,pos_x,pos_y):
-        super().__init__('Red')
+        super().__init__((255, 219, 0))
         self.pos_x = pos_x 
         self.pos_y = pos_y 
-        cor = 'Red'
+        cor = (255, 219, 0)
         self.q1 = Quadrado(pos_x,pos_y,cor)
         self.q2 = Quadrado(pos_x+22,pos_y,cor)
         self.q3 = Quadrado(pos_x,pos_y+22,cor)
@@ -161,10 +161,10 @@ class BlocoB(Bloco):
 
 class BlocoZ(Bloco):
     def __init__(self,pos_x,pos_y):
-        super().__init__('Red')
+        super().__init__((73, 255, 0))
         self.pos_x = pos_x 
         self.pos_y = pos_y 
-        cor = 'Red'
+        cor = (73, 255, 0)
         self.q1 = Quadrado(pos_x,pos_y,cor)
         self.q2 = Quadrado(pos_x+22,pos_y,cor)
         self.q3 = Quadrado(pos_x+22,pos_y+22,cor)
@@ -230,10 +230,10 @@ class BlocoZ(Bloco):
 
 class BlocoS(Bloco):
     def __init__(self,pos_x,pos_y):
-        super().__init__('Red')
+        super().__init__((0, 255, 146))
         self.pos_x = pos_x 
         self.pos_y = pos_y 
-        cor = 'Red'
+        cor = (0, 255, 146)
         self.q1 = Quadrado(pos_x,pos_y,cor)
         self.q2 = Quadrado(pos_x-22,pos_y,cor)
         self.q3 = Quadrado(pos_x-22,pos_y+22,cor)
@@ -297,10 +297,10 @@ class BlocoS(Bloco):
 
 class BlocoT(Bloco):
     def __init__(self,pos_x,pos_y):
-        super().__init__('Red')
+        super().__init__((0, 146, 255))
         self.pos_x = pos_x 
         self.pos_y = pos_y 
-        cor = 'Red'
+        cor = (0, 146, 255)
         self.q1 = Quadrado(pos_x,pos_y,cor)
         self.q2 = Quadrado(pos_x+22,pos_y,cor)
         self.q3 = Quadrado(pos_x+44,pos_y,cor)
@@ -404,10 +404,10 @@ class BlocoT(Bloco):
 
 class BlocoL(Bloco):
     def __init__(self,pos_x,pos_y):
-        super().__init__('Red')
+        super().__init__((73, 0, 255))
         self.pos_x = pos_x 
         self.pos_y = pos_y 
-        cor = 'Red'
+        cor = (73, 0, 255)
         self.q1 = Quadrado(pos_x,pos_y,cor)
         self.q2 = Quadrado(pos_x+22,pos_y,cor)
         self.q3 = Quadrado(pos_x+44,pos_y,cor)

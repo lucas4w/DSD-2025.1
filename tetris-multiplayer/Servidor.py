@@ -47,7 +47,7 @@ def udp_server():
         data, addr = udp_sock.recvfrom(4096)
         with lock:
             if addr not in clientes_udp.values():
-                # Registra novo cliente UDP
+                # registra novo cliente UDP
                 if 1 not in clientes_udp:
                     clientes_udp[1] = addr
                     print(f"Registrado jogador 1 via UDP: {addr}")
@@ -55,7 +55,7 @@ def udp_server():
                     clientes_udp[2] = addr
                     print(f"Registrado jogador 2 via UDP: {addr}")
 
-            # Descobre qual cliente enviou e repassa para o outro
+            # descobre qual cliente enviou e repassa para o outro
             remetente_id = None
             for id_, udp_addr in clientes_udp.items():
                 if udp_addr == addr:

@@ -18,7 +18,7 @@ a = pygame.Rect()
 quadrados = pygame.sprite.Group()
 quadrados_pos = {}
 
-# Estado do adversário
+# estado do adversário
 bloco_adversario = []
 quadrados_adversario = []
 status_adversario = None
@@ -78,7 +78,7 @@ udp_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 udp_sock.bind(('', 0))  # bind em uma porta livre
 udp_addr = udp_sock.getsockname()
 
-# Conexão TCP para registro inicial
+# conexão TCP para registro inicial
 """ tcp_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 tcp_sock.connect((SERVER_IP, TCP_PORT))
 tcp_sock.sendall(pickle.dumps(udp_addr))
@@ -115,7 +115,7 @@ def receive_udp():
 
 threading.Thread(target=receive_udp, daemon=True).start()
 
-# Estado do jogo
+# estado do jogo
 fall_time = 0
 fall_delay = 300
 bloco_atual = gerar_bloco_aleatorio()
@@ -142,7 +142,7 @@ while running:
         parou = bloco_atual.update_y(screen)
         print(bloco_atual.q1.x,bloco_atual.q1.y)
         fall_time = 0
-        # Monta dados para envio via UDP
+        # monta dados para envio via UDP
         outgoing_data = {
             'bloco': [
                 {'x': bloco_atual.q1.x, 'y': bloco_atual.q1.y, 'cor': bloco_atual.q1.cor},
@@ -171,7 +171,6 @@ while running:
             bloco_atual = proximo_bloco
             proximo_bloco = gerar_bloco_aleatorio()
 
-    # === Desenho ===
     screen.fill(BACKGROUND_COLOR)
     pygame.draw.rect(screen, 'Black', jogador_area)
     pygame.draw.rect(screen, 'Black', adversario_area)
@@ -183,7 +182,7 @@ while running:
     quadrados.draw(screen)
     bloco_atual.show(screen)
 
-    # Desenha bloco atual do adversário
+    # desenha bloco atual do adversário
     for quad in bloco_adversario:
         pygame.draw.rect(
             screen,
@@ -191,7 +190,7 @@ while running:
             pygame.Rect(quad['x'] + 400, quad['y'], 20, 20)
         )
 
-    # Desenha quadrados fixos do adversário
+    # desenha quadrados fixos do adversário
     for quad in quadrados_adversario:
         pygame.draw.rect(
             screen,
@@ -200,14 +199,13 @@ while running:
         )
     
     for quad in [proximo_bloco.q1, proximo_bloco.q2, proximo_bloco.q3, proximo_bloco.q4]:
-        offset_x = 372  # Ajuste para centralizar
+        offset_x = 372 
         offset_y = 140
         pygame.draw.rect(
             screen,
             quad.cor,
             pygame.Rect(quad.x - 215 + offset_x, quad.y - 94 + offset_y, 20, 20)
         )
-        #proximo_bloco_area = pygame.Rect(325, 100, 150, 120)
     if status_adversario == 'perdeu':
         mostrar_tela_game_over("Você venceu!")
         running = False
