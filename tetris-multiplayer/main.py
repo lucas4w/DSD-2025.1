@@ -12,8 +12,6 @@ jogador_area = pygame.Rect(100, 50, 225, 505)
 adversario_area = pygame.Rect(500, 50, 225, 505)
 proximo_bloco_area = pygame.Rect(325, 100, 130, 145)
 
-a = pygame.Rect()
-
 # grupo e estado
 quadrados = pygame.sprite.Group()
 quadrados_pos = {}
